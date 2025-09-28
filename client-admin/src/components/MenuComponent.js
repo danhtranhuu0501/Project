@@ -19,7 +19,7 @@ class Menu extends Component {
           </ul>
         </div>
         <div className="float-right" style={{color: 'white', fontSize: '16px', fontWeight: '600'}}>
-          Hello <b>{this.context.username}</b> |
+          Hello <b>{this.context.username || 'Admin'}</b> |
           <Link 
             to='/admin/home' 
             onClick={() => this.lnkLogoutClick()}

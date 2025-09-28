@@ -8,10 +8,12 @@ class MyProvider extends Component {
       // variables
       token: '',
       customer: null,
+      username: '',
       mycart: [],
       // functions
       setToken: this.setToken,
       setCustomer: this.setCustomer,
+      setUsername: this.setUsername,
       setMycart: this.setMycart
     };
   }
@@ -20,6 +22,9 @@ class MyProvider extends Component {
   }
   setCustomer = (value) => {
     this.setState({ customer: value });
+  }
+  setUsername = (value) => {
+    this.setState({ username: value });
   }
   setMycart = (value) => {
     this.setState({ mycart: value });
