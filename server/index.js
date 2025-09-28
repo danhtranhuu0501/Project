@@ -1,7 +1,17 @@
-//CLI: npm install express body-parser --save
+//CLI: npm install express body-parser cors --save
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Import MongoDB connection
+require('./utils/MongooseUtil');
+
+// Enable CORS for all routes
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  credentials: true
+}));
 app.listen(PORT, () => {
   console.log(`Server is listening on ${PORT}`);
 });
