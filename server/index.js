@@ -9,7 +9,9 @@ require('./utils/MongooseUtil');
 
 // Enable CORS for all routes
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://your-app-name.onrender.com'] 
+    : ['http://localhost:3000', 'http://localhost:3001'],
   credentials: true
 }));
 app.listen(PORT, () => {
