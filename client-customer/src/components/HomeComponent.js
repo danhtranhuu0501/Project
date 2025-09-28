@@ -39,14 +39,14 @@ class Home extends Component {
         <Slider />
         <div style={{height: 30 }}/>
         <div className="align-center">
-          <h2 className="text-center" style={{color: '#667eea', fontSize: '28px', fontWeight: '700', marginBottom: '30px'}}>NEW PRODUCTS</h2>
+          <h2 className="text-center" style={{color: 'var(--primary-600)', fontSize: '28px', fontWeight: '700', marginBottom: '30px'}}>NEW PRODUCTS</h2>
           <div className="product-grid">
             {newprods}
           </div>
         </div>
         {this.state.hotprods.length > 0 ?
           <div className="align-center">
-            <h2 className="text-center" style={{color: '#667eea', fontSize: '28px', fontWeight: '700', marginBottom: '30px'}}>HOT PRODUCTS</h2>
+            <h2 className="text-center" style={{color: 'var(--primary-600)', fontSize: '28px', fontWeight: '700', marginBottom: '30px'}}>HOT PRODUCTS</h2>
             <div className="product-grid">
               {hotprods}
             </div>

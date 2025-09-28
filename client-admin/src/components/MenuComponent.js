@@ -18,27 +18,24 @@ class Menu extends Component {
             <li className="menu"><Link to='/admin/statistics'>Statistics</Link></li>
           </ul>
         </div>
-        <div className="float-right" style={{color: 'white', fontSize: '16px', fontWeight: '600'}}>
-          Hello <b>{this.context.username || 'Admin'}</b> |
+        <div className="float-right" style={{color: 'white', fontSize: '16px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '12px'}}>
+          <span>Hello <b>{this.context.username || 'Admin'}</b></span>
           <Link 
             to='/admin/home' 
             onClick={() => this.lnkLogoutClick()}
+            className="btn-modern"
             style={{
               color: 'white',
               textDecoration: 'none',
-              marginLeft: '10px',
-              padding: '8px 15px',
-              borderRadius: '20px',
-              background: 'rgba(255, 255, 255, 0.1)',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.background = 'rgba(255, 255, 255, 0.2)';
-              e.target.style.transform = 'translateY(-2px)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = 'rgba(255, 255, 255, 0.1)';
-              e.target.style.transform = 'translateY(0)';
+              fontSize: '14px',
+              padding: '8px 16px',
+              borderRadius: '8px',
+              background: 'rgba(255, 255, 255, 0.15)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              transition: 'all 0.3s ease',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px'
             }}
           >
             🚪 Logout

@@ -32,8 +32,9 @@ class Menu extends Component {
             <button 
               type="submit" 
               onClick={(e) => this.btnSearchClick(e)}
+              className="btn-modern"
               style={{
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%)',
                 color: 'white',
                 border: 'none',
                 padding: '12px 25px',
@@ -42,15 +43,10 @@ class Menu extends Component {
                 fontWeight: '600',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
-                boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.4)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
+                boxShadow: 'var(--shadow-md)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px'
               }}
             >
               🔍 SEARCH
