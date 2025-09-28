@@ -1,4 +1,4 @@
-https://thd-react.onrender.com/home
+Link Website :   https://thd-react.onrender.com/home
 
 
 Kiến trúc tổng quan
@@ -53,18 +53,6 @@ Nodemailer (email kích hoạt/reset password)
 
 Google Maps (vị trí cửa hàng)
 
-Base64 image storage
-
 React Router, Axios, Context API
 
 Responsive design, lazy loading, code splitting, tối ưu hình ảnh
-
-✅ Điểm nổi bật
-
-Đăng nhập thông minh: 1 form duy nhất → tự động redirect theo vai trò
-
-Hệ thống giỏ hàng & đơn hàng hoàn chỉnh
-
-Dashboard thống kê doanh thu
-
-Triển khai production-ready trên Render + MongoDB Atlas
