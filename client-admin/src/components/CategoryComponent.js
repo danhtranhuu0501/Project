@@ -9,31 +9,11 @@ class Category extends Component {
     super(props);
     this.state = {
       categories: [],
-      itemSelected: null,
-      loading: false,
-      error: null
+      itemSelected: null
     };
   }
   render() {
-    if (this.state.loading) {
-      return (
-        <div className="card-modern" style={{margin: '20px', padding: '40px', textAlign: 'center'}}>
-          <h2>Loading categories...</h2>
-        </div>
-      );
-    }
-
-    if (this.state.error) {
-      return (
-        <div className="card-modern" style={{margin: '20px', padding: '40px', textAlign: 'center'}}>
-          <h2 style={{color: 'red'}}>Error: {this.state.error}</h2>
-          <button className="btn-modern" onClick={() => this.apiGetCategories()}>Retry</button>
-        </div>
-      );
-    }
-
-    const categories = Array.isArray(this.state.categories) ? this.state.categories : [];
-    const cates = categories.map((item) => {
+    const cates = this.state.categories.map((item) => {
       return (
         <tr key={item._id} className="datatable" onClick={() => this.trItemClick(item)}>
           <td>{item._id}</td>
@@ -42,9 +22,9 @@ class Category extends Component {
       );
     });
     return (
-      <div className="card-modern" style={{margin: '20px', padding: '30px'}}>
+      <div>
         <div className="float-left">
-          <h2 className="text-center" style={{color: '#667eea', fontSize: '28px', fontWeight: '700', marginBottom: '30px'}}>📂 CATEGORY LIST</h2>
+          <h2 className="text-center">CATEGORY LIST</h2>
           <table className="datatable" border="1">
             <tbody>
               <tr className="datatable">
@@ -73,20 +53,11 @@ class Category extends Component {
   }
   // apis
   apiGetCategories() {
-    this.setState({ loading: true, error: null });
     const config = { headers: { 'x-access-token': this.context.token } };
-    axios.get('/api/admin/categories', config)
-      .then((res) => {
-        const result = res.data;
-        this.setState({ categories: result, loading: false });
-      })
-      .catch((error) => {
-        console.error('Error fetching categories:', error);
-        this.setState({ 
-          error: error.response?.data?.message || error.message || 'Failed to fetch categories',
-          loading: false 
-        });
-      });
+    axios.get('/api/admin/categories', config).then((res) => {
+      const result = res.data;
+      this.setState({ categories: result });
+    });
   }
 }
 export default Category;

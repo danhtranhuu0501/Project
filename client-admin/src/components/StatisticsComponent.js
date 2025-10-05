@@ -1,6 +1,19 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import MyContext from '../contexts/MyContext';
+import { Bar, Pie } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement
+} from 'chart.js';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
 class Statistics extends Component {
     static contextType = MyContext; // using this.context to access global state
@@ -18,55 +31,54 @@ class Statistics extends Component {
     };
 }
 render() {
+    const barData = {
+      labels: ['Categories', 'Products', 'Orders', 'Customers'],
+      datasets: [
+        {
+          label: 'Totals',
+          data: [this.state.noCategories, this.state.noProducts, this.state.noOrders, this.state.noCustomers],
+          backgroundColor: 'rgba(13,110,253,0.6)'
+        }
+      ]
+    };
+    const pieData = {
+      labels: ['Pending', 'Approved', 'Canceled'],
+      datasets: [
+        {
+          data: [this.state.noOrdersPending, this.state.noOrdersApproved, this.state.noOrdersCanceled],
+          backgroundColor: ['#ffc107', '#198754', '#dc3545']
+        }
+      ]
+    };
     return (
-        <div className="text-center">
-            <h2 className="text-center">STATISTICS </h2> 
-            <table className = "align-center">
-                <tbody>
-                    <tr>
-                        <td align="right">No.Categories </td> 
-                        <td></td>
-                        <td>{this.state.noCategories}</td>
-                    </tr>
-                    <tr>
-                        <td align="right">No.Products </td> 
-                        <td></td>
-                        <td>{this.state.noProducts}</td>
-                        </tr>
-                        <tr>
-                            <td align="right">No.Orders </td> 
-                            <td></td>
-                            <td>{this.state.noOrders}</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td align="right">Pending &ensp; </td> 
-                            <td>{this.state.noOrdersPending}</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td align="right">Approved &ensp; </td> 
-                            <td>{this.state.noOrdersApproved}</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td align="right">Canceled &ensp; </td> 
-                            <td>{this.state.noOrdersCanceled}</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td align="right">Revenue &ensp; </td> 
-                            <td>{this.state.noOrdersRevenue}</td>
-                        </tr>
-                        <tr>
-                            <td align="right">No. Customers </td> 
-                            <td></td>
-                            <td>{this.state.noCustomers}</td>
-                        </tr>
-                    </tbody>
-                </table>
+      <div className="container py-4">
+        <h4 className="fw-bold mb-4">Thống kê</h4>
+        <div className="row g-4">
+          <div className="col-md-6">
+            <div className="card shadow-sm">
+              <div className="card-body">
+                <h6 className="card-title">Tổng quan</h6>
+                <Bar data={barData} />
+              </div>
             </div>
-        );
+          </div>
+          <div className="col-md-6">
+            <div className="card shadow-sm">
+              <div className="card-body">
+                <h6 className="card-title">Đơn hàng theo trạng thái</h6>
+                <Pie data={pieData} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="card shadow-sm mt-4">
+          <div className="card-body">
+            <h6 className="card-title">Doanh thu</h6>
+            <p className="display-6 text-primary">{this.state.noOrdersRevenue}</p>
+          </div>
+        </div>
+      </div>
+    );
     }
     componentDidMount() { 
         this.apiGetStatistics ();

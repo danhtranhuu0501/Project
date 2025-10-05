@@ -8,38 +8,18 @@ class Order extends Component {
     super(props);
     this.state = {
       orders: [],
-      order: null,
-      loading: false,
-      error: null
+      order: null
     };
   }
   render() {
-    if (this.state.loading) {
-      return (
-        <div className="card-modern" style={{margin: '20px', padding: '40px', textAlign: 'center'}}>
-          <h2>Loading orders...</h2>
-        </div>
-      );
-    }
-
-    if (this.state.error) {
-      return (
-        <div className="card-modern" style={{margin: '20px', padding: '40px', textAlign: 'center'}}>
-          <h2 style={{color: 'red'}}>Error: {this.state.error}</h2>
-          <button className="btn-modern" onClick={() => this.apiGetOrders()}>Retry</button>
-        </div>
-      );
-    }
-
-    const orders = Array.isArray(this.state.orders) ? this.state.orders : [];
-    const ordersList = orders.map((item) => {
+    const orders = this.state.orders.map((item) => {
       return (
         <tr key={item._id} className="datatable" onClick={() => this.trItemClick(item)}>
           <td>{item._id}</td>
           <td>{new Date(item.cdate).toLocaleString()}</td>
           <td>{item.customer.name}</td>
           <td>{item.customer.phone}</td>
-          <td>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.total)}</td>
+          <td>{item.total}</td>
           <td>{item.status}</td>
           <td>
             {item.status === 'PENDING' ?
@@ -50,8 +30,7 @@ class Order extends Component {
       );
     });
     if (this.state.order) {
-      const orderItems = Array.isArray(this.state.order.items) ? this.state.order.items : [];
-      var items = orderItems.map((item, index) => {
+      var items = this.state.order.items.map((item, index) => {
         return (
           <tr key={item.product._id} className="datatable">
             <td>{index + 1}</td>
@@ -66,9 +45,9 @@ class Order extends Component {
       });
     }
     return (
-      <div className="card-modern" style={{margin: '20px', padding: '30px'}}>
+      <div>
         <div className="align-center">
-          <h2 className="text-center" style={{color: '#667eea', fontSize: '28px', fontWeight: '700', marginBottom: '30px'}}>📋 ORDER LIST</h2>
+          <h2 className="text-center">ORDER LIST</h2>
           <table className="datatable" border="1">
             <tbody>
               <tr className="datatable">
@@ -80,13 +59,13 @@ class Order extends Component {
                 <th>Status</th>
                 <th>Action</th>
               </tr>
-              {ordersList}
+              {orders}
             </tbody>
           </table>
         </div>
         {this.state.order ?
           <div className="align-center">
-            <h2 className="text-center" style={{color: '#667eea', fontSize: '24px', fontWeight: '700', marginBottom: '20px'}}>ORDER DETAIL</h2>
+            <h2 className="text-center">ORDER DETAIL</h2>
             <table className="datatable" border="1">
               <tbody>
                 <tr className="datatable">
@@ -115,20 +94,11 @@ class Order extends Component {
   }
   // apis
   apiGetOrders() {
-    this.setState({ loading: true, error: null });
     const config = { headers: { 'x-access-token': this.context.token } };
-    axios.get('/api/admin/orders', config)
-      .then((res) => {
-        const result = res.data;
-        this.setState({ orders: result, loading: false });
-      })
-      .catch((error) => {
-        console.error('Error fetching orders:', error);
-        this.setState({ 
-          error: error.response?.data?.message || error.message || 'Failed to fetch orders',
-          loading: false 
-        });
-      });
+    axios.get('/api/admin/orders', config).then((res) => {
+      const result = res.data;
+      this.setState({ orders: result });
+    });
   }
   // event-handlers
   lnkApproveClick(id) {

@@ -9,31 +9,11 @@ class Customer extends Component {
     this.state = {
       customers: [],
       orders: [],
-      order: null,
-      loading: false,
-      error: null
+      order: null
     };
   }
   render() {
-    if (this.state.loading) {
-      return (
-        <div className="card-modern" style={{margin: '20px', padding: '40px', textAlign: 'center'}}>
-          <h2>Loading customers...</h2>
-        </div>
-      );
-    }
-
-    if (this.state.error) {
-      return (
-        <div className="card-modern" style={{margin: '20px', padding: '40px', textAlign: 'center'}}>
-          <h2 style={{color: 'red'}}>Error: {this.state.error}</h2>
-          <button className="btn-modern" onClick={() => this.apiGetCustomers()}>Retry</button>
-        </div>
-      );
-    }
-
-    const customers = Array.isArray(this.state.customers) ? this.state.customers : [];
-    const customersList = customers.map((item) => {
+    const customers = this.state.customers.map((item) => {
       return (
         <tr key={item._id} className="datatable" onClick={() => this.trCustomerClick(item)}>
           <td>{item._id}</td>
@@ -52,8 +32,7 @@ class Customer extends Component {
         </tr>
       );
     });
-    const orders = Array.isArray(this.state.orders) ? this.state.orders : [];
-    const ordersList = orders.map((item) => {
+    const orders = this.state.orders.map((item) => {
       return (
         <tr key={item._id} className="datatable" onClick={() => this.trOrderClick(item)}>
           <td>{item._id}</td>
@@ -66,8 +45,7 @@ class Customer extends Component {
       );
     });
     if (this.state.order) {
-      const orderItems = Array.isArray(this.state.order.items) ? this.state.order.items : [];
-      var items = orderItems.map((item, index) => {
+      var items = this.state.order.items.map((item, index) => {
         return (
           <tr key={item.product._id} className="datatable">
             <td>{index + 1}</td>
@@ -82,9 +60,9 @@ class Customer extends Component {
       });
     }
     return (
-      <div className="card-modern" style={{margin: '20px', padding: '30px'}}>
+      <div>
         <div className="align-center">
-          <h2 className="text-center" style={{color: '#667eea', fontSize: '28px', fontWeight: '700', marginBottom: '30px'}}>👥 CUSTOMER LIST</h2>
+          <h2 className="text-center">CUSTOMER LIST</h2>
           <table className="datatable" border="1">
             <tbody>
               <tr className="datatable">
@@ -97,7 +75,7 @@ class Customer extends Component {
                 <th>Active</th>
                 <th>Action</th>
               </tr>
-              {customersList}
+              {customers}
             </tbody>
           </table>
         </div>
@@ -114,7 +92,7 @@ class Customer extends Component {
                   <th>Total</th>
                   <th>Status</th>
                 </tr>
-                {ordersList}
+                {orders}
               </tbody>
             </table>
           </div>
@@ -160,20 +138,11 @@ class Customer extends Component {
   }
   // apis
   apiGetCustomers() {
-    this.setState({ loading: true, error: null });
     const config = { headers: { 'x-access-token': this.context.token } };
-    axios.get('/api/admin/customers', config)
-      .then((res) => {
-        const result = res.data;
-        this.setState({ customers: result, loading: false });
-      })
-      .catch((error) => {
-        console.error('Error fetching customers:', error);
-        this.setState({ 
-          error: error.response?.data?.message || error.message || 'Failed to fetch customers',
-          loading: false 
-        });
-      });
+    axios.get('/api/admin/customers', config).then((res) => {
+      const result = res.data;
+      this.setState({ customers: result });
+    });
   }
   apiGetOrdersByCustID(cid) {
     const config = { headers: { 'x-access-token': this.context.token } };

@@ -18,11 +18,7 @@ class Login extends Component {
   render() {
     return (
       <div className="align-center">
-        <h2 className="text-center">LOGIN</h2>
-        <p className="text-center" style={{ color: '#666', fontSize: '14px' }}>
-          Enter your credentials - we'll detect your role automatically
-        </p>
-        
+        <h2 className="text-center">CUSTOMER LOGIN</h2>
         <form>
           <table className="align-center">
             <tbody>
@@ -80,69 +76,33 @@ class Login extends Component {
 
   // apis
   apiLogin(account) {
-    // Try admin login first
-    this.tryAdminLogin(account);
-  }
-
-  tryAdminLogin(account) {
-    axios.post('/api/admin/login', account).then((res) => {
-      const result = res.data;
-      if (result.success === true) {
-        // Admin login successful
-        this.context.setToken(result.token);
-        this.context.setUsername(account.username);
-        localStorage.setItem('admin_token', result.token);
-        
-        // Clear customer data
-        this.context.setCustomer(null);
-        localStorage.removeItem('customer_token');
-        
-        // Redirect to admin page
-        toast.success('Admin login successful');
-        setTimeout(() => {
-          // Check if running on localhost for development
-          if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            window.location.href = 'http://localhost:3001/admin/home';
-          } else {
-            window.location.href = '/admin';
-          }
-        }, 1000);
-      } else {
-        // Admin login failed, try customer login
-        this.tryCustomerLogin(account);
-      }
-    }).catch((error) => {
-      // Admin API error, try customer login
-      this.tryCustomerLogin(account);
-    });
-  }
-
-  tryCustomerLogin(account) {
     axios.post('/api/customer/login', account).then((res) => {
       const result = res.data;
       if (result.success === true) {
-        // Customer login successful
         this.context.setToken(result.token);
         this.context.setCustomer(result.customer);
+        this.props.navigate('/home');
+        toast.success('Login successful');
         localStorage.setItem('customer_token', result.token);
-        
-        // Clear admin data
-        this.context.setUsername('');
-        localStorage.removeItem('admin_token');
-        
-        // Check if running on localhost for development
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-          // Stay on current port for customer
-          this.props.navigate('/home');
-        } else {
-          this.props.navigate('/home');
-        }
-        toast.success('Customer login successful');
       } else {
-        toast.error(result.message);
+        // If customer login fails, try admin login and redirect to admin client
+        this.apiAdminLoginFallback(account, result.message);
       }
-    }).catch((error) => {
-      toast.error('Login failed: Invalid credentials');
+    });
+  }
+  apiAdminLoginFallback(account, originalMessage) {
+    axios.post('/api/admin/login', account).then((res) => {
+      const result = res.data;
+      if (result && result.success === true) {
+        localStorage.setItem('admin_token', result.token);
+        toast.success('Logged in as admin');
+        // Redirect to admin client at localhost:3001
+        window.location.href = 'http://localhost:3001/admin/home';
+      } else {
+        toast.error(originalMessage || (result && result.message) || 'Login failed');
+      }
+    }).catch(() => {
+      toast.error(originalMessage || 'Login failed');
     });
   }
 }

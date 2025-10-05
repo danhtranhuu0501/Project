@@ -11,41 +11,21 @@ class Product extends Component {
       products: [],
       noPages: 0,
       curPage: 1,
-      itemSelected: null,
-      loading: false,
-      error: null
+      itemSelected: null
     };
   }
   render() {
-    if (this.state.loading) {
-      return (
-        <div className="card-modern" style={{margin: '20px', padding: '40px', textAlign: 'center'}}>
-          <h2>Loading products...</h2>
-        </div>
-      );
-    }
-
-    if (this.state.error) {
-      return (
-        <div className="card-modern" style={{margin: '20px', padding: '40px', textAlign: 'center'}}>
-          <h2 style={{color: 'red'}}>Error: {this.state.error}</h2>
-          <button className="btn-modern" onClick={() => this.apiGetProducts(this.state.curPage)}>Retry</button>
-        </div>
-      );
-    }
-
-    const products = Array.isArray(this.state.products) ? this.state.products : [];
-    const prods = products.map((item) => {
+    const prods = this.state.products.map((item) => {
       return (
         <tr key={item._id} className="datatable" onClick={() => this.trItemClick(item)}>
           <td>{item._id}</td>
           <td>{item.name}</td>
-          <td>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}</td>
+          <td>{item.price}</td>
           <td>{new Date(item.cdate).toLocaleString()}</td>
           <td>{item.category.name}</td>
           <td><img src={"data:image/jpg;base64," + item.image} width="100px" height="100px" alt="" /></td>
           <td>
-            {Array.isArray(item.imageDetails) && item.imageDetails.length > 0 ? (
+            {item.imageDetails.length > 0 ? (
               item.imageDetails.map((image, index) => (
                 <img key={index} src={"data:image/jpg;base64," + image} width="100px" height=" 100px" alt="" />
             ))
@@ -62,10 +42,10 @@ class Product extends Component {
       }
     });
     return (
-      <div className="card-modern" style={{margin: '20px', padding: '30px'}}>
+      <div>
         <div className="float-left">
-          <h2 className="text-center" style={{color: '#667eea', fontSize: '28px', fontWeight: '700', marginBottom: '30px'}}>📦 PRODUCT LIST</h2>
-          <table className="datatable">
+          <h2 className="text-center">PRODUCT LIST</h2>
+          <table className="datatable" border="1">
             <tbody>
               <tr className="datatable">
                 <th>ID</th>
@@ -74,15 +54,11 @@ class Product extends Component {
                 <th>Creation date</th>
                 <th>Category</th>
                 <th>Image</th>
-                <th>Image Details</th>
+                <th>image details</th>
               </tr>
               {prods}
               <tr>
-                <td colSpan="7" style={{textAlign: 'center', padding: '20px'}}>
-                  <div style={{display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap'}}>
-                    {pagination}
-                  </div>
-                </td>
+                <td colSpan="6">{pagination}</td>
               </tr>
             </tbody>
           </table>
@@ -108,20 +84,11 @@ class Product extends Component {
   }
   // apis
   apiGetProducts(page) {
-    this.setState({ loading: true, error: null });
     const config = { headers: { 'x-access-token': this.context.token } };
-    axios.get('/api/admin/products?page=' + page, config)
-      .then((res) => {
-        const result = res.data;
-        this.setState({ products: result.products, noPages: result.noPages, curPage: result.curPage, loading: false });
-      })
-      .catch((error) => {
-        console.error('Error fetching products:', error);
-        this.setState({ 
-          error: error.response?.data?.message || error.message || 'Failed to fetch products',
-          loading: false 
-        });
-      });
+    axios.get('/api/admin/products?page=' + page, config).then((res) => {
+      const result = res.data;
+      this.setState({ products: result.products, noPages: result.noPages, curPage: result.curPage });
+    });
   }
 }
 export default Product;

@@ -14,17 +14,19 @@ class Main extends Component {
   render() {
     if (this.context.token !== '') {
       return (
-        <div className="body-admin">
+        <div className="d-flex">
           <Menu />
-          <Routes>
-          <Route path='/admin' element={<Navigate replace to='/admin/home' />} />
-          <Route path='/admin/home' element={<Home />} />
-          <Route path='/admin/category' element={<Category />} />
-          <Route path='/admin/product' element={<Product />} />
-          <Route path='/admin/order' element={<Order />} />
-          <Route path='/admin/customer' element={<Customer />} />
-          <Route path='/admin/statistics' element={<Statistics />} />
-        </Routes>
+          <div className="flex-grow-1 p-3">
+            <Routes>
+              <Route path='/admin' element={<Navigate replace to='/admin/home' />} />
+              <Route path='/admin/home' element={<Home />} />
+              <Route path='/admin/category' element={<Category />} />
+              <Route path='/admin/product' element={<Product />} />
+              <Route path='/admin/order' element={<Order />} />
+              <Route path='/admin/customer' element={<Customer />} />
+              <Route path='/admin/statistics' element={<Statistics />} />
+            </Routes>
+          </div>
         </div>
       );
     }

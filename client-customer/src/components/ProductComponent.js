@@ -9,36 +9,30 @@ class Product extends Component {
     this.state = {
       products: [],
       sort: 'default',
-      loading: false,
     };
   }
   render() {
     const prods = this.state.products.map((item) => {
       return (
-        <div key={item._id} className="product-card">
-          <Link to={'/product/' + item._id}>
-            <img src={"data:image/jpg;base64," + item.image} alt={item.name} />
-            <h3 className="title clamp-2">{item.name}</h3>
-            <div className="price">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}</div>
-          </Link>
+        <div key={item._id} className="col-6 col-sm-4 col-md-3 col-lg-3 mb-4">
+          <div className="card h-100 shadow-sm">
+            <Link to={'/product/' + item._id} className="text-decoration-none text-dark">
+              <img src={"data:image/jpg;base64," + item.image} className="card-img-top object-fit-cover" alt="product" style={{height: 220}} />
+              <div className="card-body">
+                <h6 className="card-title text-truncate" title={item.name}>{item.name}</h6>
+                <p className="card-text text-primary fw-bold mb-0">{item.price}</p>
+              </div>
+            </Link>
+          </div>
         </div>
       );
     });
     return (
-      <div className="text-center">
-        <h2 className="text-center products-header">SẢN PHẨM</h2>
-        <div className="toolbar">
-          <div className="toolbar-left" />
-          <div className="toolbar-right">
-            <select
-              className="select-modern"
-              value={this.state.sort}
-              onChange={(e) => {
-                const value = e.target.value;
-                this.setState({ sort: value });
-                this.cmbSortChange(value);
-              }}
-            >
+      <div className="container py-4">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h4 className="mb-0">Danh sách sản phẩm</h4>
+          <div className="d-inline-block">
+            <select className="form-select" style={{width: 240}} value={this.state.sort} onChange={(e) => { this.setState({ sort: e.target.value }); this.cmbSortChange(e.target.value); }}>
               <option value="default">Sắp xếp</option>
               <option value="nameASC">Tên (A → Z)</option>
               <option value="nameDESC">Tên (Z → A)</option>
@@ -47,19 +41,9 @@ class Product extends Component {
             </select>
           </div>
         </div>
-        {this.state.loading ? (
-          <div className="product-grid">
-            {Array.from({ length: 6 }).map((_, idx) => (
-              <div key={idx} className="product-card skeleton-card" />
-            ))}
-          </div>
-        ) : this.state.products.length === 0 ? (
-          <div className="empty-state">Không có sản phẩm phù hợp</div>
-        ) : (
-          <div className="product-grid">
-            {prods}
-          </div>
-        )}
+        <div className="row">
+          {prods}
+        </div>
       </div>
     );
   }
@@ -83,33 +67,31 @@ class Product extends Component {
   }
   // apis
   apiGetProductsByKeyword(keyword) {
-    this.setState({ loading: true });
     axios.get('/api/customer/products/search/' + keyword).then((res) => {
       const result = res.data;
-      this.setState({ products: result, loading: false });
-    }).catch(() => this.setState({ loading: false }));
+      this.setState({ products: result });
+    });
   }
   // apis
   apiGetProductsByCatID(cid) {
-    this.setState({ loading: true });
     axios.get('/api/customer/products/category/' + cid).then((res) => {
       const result = res.data;
-      this.setState({ products: result, loading: false });
-    }).catch(() => this.setState({ loading: false }));
+      this.setState({ products: result });
+    });
   }
   // event-handlers
-cmbSortChange (sort) {
-	const products = [...this.state.products];
-	if (sort === 'nameASC') {
-		products.sort((a, b) => a.name.localeCompare(b.name));
+  cmbSortChange(sort) {
+    let sorted = [...this.state.products];
+    if (sort === 'nameASC') {
+      sorted.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
     } else if (sort === 'nameDESC') {
-		products.sort((a, b) => b.name.localeCompare(a.name));
+      sorted.sort((a, b) => (b.name || '').localeCompare(a.name || ''));
     } else if (sort === 'priceASC') {
-		products.sort((a, b) => a.price - b.price);
+      sorted.sort((a, b) => (a.price || 0) - (b.price || 0));
     } else if (sort === 'priceDESC') {
-		products.sort((a, b) => b.price - a.price);
+      sorted.sort((a, b) => (b.price || 0) - (a.price || 0));
     }
-    this.setState({ products: products });
+    this.setState({ products: sorted });
   }
 }
 export default withRouter(Product);

@@ -1,5 +1,6 @@
 require('../utils/MongooseUtil');
 const Models = require('./Models');
+const { selectByCount } = require('./ProductDAO');
 
 const CustomerDAO = {
   async selectByUsernameOrEmail(username, email) {
@@ -43,7 +44,7 @@ const CustomerDAO = {
     const customer = await Models.Customer.findOne(query);
     return customer;
   },
-  async resetpwd(_id, token, password) {
+  async resetPwd(_id, token, password) {
     const query = { _id: _id, token: token };
     const newValues = { password: password };
     const result = await Models.Customer.findOneAndUpdate(query, newValues, { new: true });

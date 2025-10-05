@@ -41,6 +41,19 @@ class Main extends Component {
           <Route path='/gmap' element={<Gmap />} />
           <Route path='/resetpwd' element={<Resetpwd />} />
         </Routes>
+        <footer className="bg-body-tertiary mt-5">
+          <div className="container py-4">
+            <div className="row">
+              <div className="col-md-6">
+                <h6 className="fw-bold">Lapmead</h6>
+                <p className="mb-0">Mua sắm tiện lợi, giao nhanh.</p>
+              </div>
+              <div className="col-md-6 text-md-end mt-3 mt-md-0">
+                <span className="text-secondary">© {new Date().getFullYear()} Lapmead</span>
+              </div>
+            </div>
+          </div>
+        </footer>
       </div>
     );
   }

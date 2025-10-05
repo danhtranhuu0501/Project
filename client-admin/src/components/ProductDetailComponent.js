@@ -17,8 +17,7 @@ class ProductDetail extends Component {
     };
   }
   render() {
-    const categories = Array.isArray(this.state.categories) ? this.state.categories : [];
-    const cates = categories.map((cate) => {
+    const cates = this.state.categories.map((cate) => {
       if (this.props.item != null) {
         return (<option key={cate._id} value={cate._id} selected={cate._id === this.props.item.category._id}>{cate.name}</option>);
       } else {
@@ -68,9 +67,9 @@ class ProductDetail extends Component {
               </tr>
               <tr>
                 <td colSpan="2">
-                  {Array.isArray(this.state.imgDetails) ? this.state.imgDetails.map((image, index) => (
-                    <img key ={index} src={image} width="100px" height="100px" alt='' />    
-                  )) : null}
+                  {this.state.imgDetails.map((image, index) => (
+                    <img key ={index} src='image' width="100px" height="100px" alt='' />    
+                  ))}
                   </td>
               </tr>
             </tbody>
