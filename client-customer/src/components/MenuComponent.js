@@ -24,7 +24,7 @@ class Menu extends Component {
     return (
       <nav className="navbar navbar-expand-lg bg-body-tertiary sticky-top">
         <div className="container">
-          <Link className="navbar-brand fw-bold" to="/">Lapmead</Link>
+          <Link className="navbar-brand fw-bold" to="/">THD</Link>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon" />
           </button>

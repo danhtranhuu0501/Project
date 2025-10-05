@@ -45,11 +45,11 @@ class Main extends Component {
           <div className="container py-4">
             <div className="row">
               <div className="col-md-6">
-                <h6 className="fw-bold">Lapmead</h6>
+                <h6 className="fw-bold">THD</h6>
                 <p className="mb-0">Mua sắm tiện lợi, giao nhanh.</p>
               </div>
               <div className="col-md-6 text-md-end mt-3 mt-md-0">
-                <span className="text-secondary">© {new Date().getFullYear()} Lapmead</span>
+                <span className="text-secondary">© {new Date().getFullYear()} THD</span>
               </div>
             </div>
           </div>
